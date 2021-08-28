@@ -3,14 +3,14 @@ const consoleTable = require('console.table')
 // Import and require mysql2
 const mysql = require('mysql2');
 
-const db = mysql.createConnection(
-    {
-        host: 'localhost'
-        user: 'root',
-        password: '1234',
-        database: 'employee_db'
-    },
-);
+const dbConnectionProperties =
+{
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '1234',
+    database: 'employee_db'
+}
 
 console.log('---------------------------\nEMPLOYEE MANAGER\n---------------------------')
 
@@ -52,5 +52,29 @@ const mainPrompt = () => {
             }
         });
 }
+const dbConnection = mysql.createConnection(dbConnectionProperties);
 
-mainPrompt();
+dbConnection.connect(err => {
+    if (err) {
+        throw err;
+    }
+    console.log('Connection to Database Successful!');
+    mainPrompt();
+})
+
+function viewAllEmployees() {
+    dbConnection.query("SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name AS departments, roles.salary, CONCAT(e.first_name, ' ' ,e.last_name) AS manager FROM employees INNER JOIN roles ON roles.id = employees.role_id INNER JOIN departments ON departments.id = roles.department_id LEFT JOIN employees e ON employees.manager_id = e.id;",
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.table(results);
+            mainPrompt();
+        }
+    );
+}
+
+
+
+
+
