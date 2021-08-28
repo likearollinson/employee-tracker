@@ -3,6 +3,7 @@ const consoleTable = require('console.table')
 // Import and require mysql2
 const mysql = require('mysql2');
 
+
 const dbConnectionProperties =
 {
     host: 'localhost',
@@ -74,7 +75,69 @@ function viewAllEmployees() {
     );
 }
 
+function addEmployee() {
+    let managerArr = [];
+    let roleArr = [];
 
+    dbConnection.query('SELECT first_name, last_name FROM employees WHERE manager_id IS NULL',
+        (err, results) => {
+            if (err) throw err;
+            results.map(manager =>
+                managerArr.push(`${manager.first_name} ${manager.last_name}`));
+            return managerArr;
+        }
+    );
+
+    dbConnection.query('SELECT * FROM roles', (err, results) => {
+        if (err) throw err;
+        results.map(roles => roleArr.push(`${roles.title}`));
+        return roleArr;
+    });
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: "What is the employee's first name?",
+                name: 'first_name',
+            },
+            {
+                type: 'input',
+                message: "What is the employee's last name?",
+                name: 'last_name',
+            },
+            {
+                type: 'rawlist',
+                message: "What is the employee's role?",
+                name: 'role',
+                choices: roleArr,
+            },
+            {
+                type: 'rawlist',
+                message: "Who is the employee's manager?",
+                name: 'manager',
+                choices: managerArr,
+            },
+        ])
+        .then(results => {
+            //variables set for role and manager id so tables can be connected in same function
+            const role_id = roleArr.indexOf(results.role) + 1;
+            const manager_id = managerArr.indexOf(results.manager) + 1;
+
+            //variable for new employees
+            const newEmployee = {
+                first_name: results.first_name,
+                last_name: results.last_name,
+                manager_id: manager_id,
+                role_id: role_id,
+            };
+
+            //insert new employee into database
+            dbConnection.query('INSERT INTO employees SET ?', newEmployee, err => {
+                if (err) throw err;
+                mainPrompt();
+            });
+        });
+}
 
 
 
