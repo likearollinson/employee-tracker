@@ -4,11 +4,11 @@ const consoleTable = require('console.table')
 const mysql = require('mysql2');
 
 const db = mysql.createConnection(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
     {
-        host: 'localhost',
+        host: 'localhost'
+        user: 'root',
+        password: '1234',
+        database: 'employee_db'
     },
 );
 
@@ -52,3 +52,5 @@ const mainPrompt = () => {
             }
         });
 }
+
+mainPrompt();
