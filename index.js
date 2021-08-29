@@ -223,3 +223,54 @@ function viewAllRoles() {
         }
     );
 }
+
+// function for adding new role with choices for department and salary
+function addRole() {
+    let departmentArr = [];
+
+    promiseMySql
+        .createConnection(dbConnectionProperties)
+        .then(conn => {
+            return conn.query('SELECT departments.id, departments.name FROM departments');
+        })
+        .then(results => {
+            results.map(result => departmentArr.push(result.name));
+            return results;
+        })
+        .then(results => {
+            inquirer
+                .prompt([
+                    {
+                        type: 'input',
+                        message: 'What is the name for this new role?',
+                        name: 'role',
+                    },
+                    {
+                        type: 'number',
+                        message: 'What is the salary for this new role?',
+                        name: 'salary',
+                    },
+                    {
+                        type: 'list',
+                        message: 'What department is this new role in?',
+                        name: 'department',
+                        choices: departmentArr,
+                    },
+                ])
+                .then(answer => {
+                    let department_id;
+
+                    for (let i = 0; i < results.length; i++)
+                        if (answer.departments = results[i].name) {
+                            department_id = results[i].id;
+                        }
+                    // department id, salary and role added to table
+                    dbConnection.query(`INSERT INTO roles (title, salary, department_id) VALUES ('${answer.role}', ${answer.salary}, ${department_id})`,
+                        (err, res) => {
+                            if (err) throw err;
+                            mainPrompt();
+                        }
+                    );
+                });
+        });
+}
