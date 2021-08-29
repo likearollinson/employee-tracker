@@ -286,3 +286,22 @@ function viewAllDepartments() {
         }
     );
 }
+
+function addDepartment() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is the department you want to add?',
+                name: 'department',
+            },
+        ])
+        .then(answer => {
+            dbConnection.query(`INSERT INTO departments (name) VALUES ('${answer.department}')`,
+                (err, results) => {
+                    if (err) throw err;
+                    mainPrompt();
+                }
+            )
+        })
+}
