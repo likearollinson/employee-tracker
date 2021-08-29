@@ -274,3 +274,15 @@ function addRole() {
                 });
         });
 }
+
+function viewAllDepartments() {
+    dbConnection.query("SELECT id, name AS 'Deparment Name' FROM departments",
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.table(results);
+            mainPrompt();
+        }
+    );
+}
