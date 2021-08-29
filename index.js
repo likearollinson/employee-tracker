@@ -211,3 +211,15 @@ function updateEmployeeRole() {
         });
 }
 
+// function for viewing roles with id, title and salary shown
+function viewAllRoles() {
+    dbConnection.query('SELECT roles.id, roles.title, roles.salary FROM roles',
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.table(results);
+            mainPrompt();
+        }
+    );
+}
