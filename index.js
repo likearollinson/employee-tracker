@@ -93,6 +93,7 @@ function addEmployee() {
             results.map(manager =>
                 managerArr.push(`${manager.first_name} ${manager.last_name}`));
             return managerArr;
+
         }
     );
 
@@ -131,7 +132,15 @@ function addEmployee() {
         .then(results => {
             //variables set for role and manager id so tables can be connected in same function
             const role_id = roleArr.indexOf(results.role) + 1;
-            const manager_id = managerArr.indexOf(results.manager) + 1;
+            if (managerArr.indexOf(results.manager) == 0) {
+                manager_id = 1;
+            } else if (managerArr.indexOf(results.manager) == 1) {
+                manager_id = 3;
+            } else if (managerArr.indexOf(results.manager) == 2) {
+                manager_id = 5;
+            } else {
+                manager_id = 7;
+            }
 
             //variable for new employees
             const newEmployee = {
