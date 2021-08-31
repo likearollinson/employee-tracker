@@ -24,7 +24,7 @@ The goal of this project is to showcase the power of MySQL2 package and the Inqu
 
 ## Functionality
 
-![screencap](./assets/screemcap.gif)
+![screencap](./assets/screencap.gif)
 
 [Video Walkthrough](https://drive.google.com/file/d/1zjRgEu18pOtm-ie2HL1FmoKbbFZSLHlU/view?usp=sharing)
 
